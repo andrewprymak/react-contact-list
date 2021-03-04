@@ -2,6 +2,9 @@ import React, {Component, Fragment} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+// Import uuid
+import { v4 as uuidv4 } from 'uuid';
+
 //Components
 import Header from './Components/Header/Header';
 import Search from './Components/Search/search';
@@ -13,28 +16,44 @@ class App extends Component {
   state = {
     List: [
       {
-        "Avatar" : "https://www.bootdey.com/img/Content/avatar/avatar3.png",
-        "Name" : "Mila Kunis",
-        "Created" : "2013/08/08",
-        "Role" : "Admin",
-        "Status" : "Active",
-        "Email" : "mila@kunis.com"
+        "Id": uuidv4(),
+        "Avatar": "20",
+        "Name": "Mila Kunis",
+        "Created": "2013/08/08",
+        "Role": "Admin",
+        "Status": "Inactive",
+        "Email": "mila@kunis.com",
+        "Gender": "women"
       },
       {
-        "Avatar" : "https://www.bootdey.com/img/Content/avatar/avatar2.png",
-        "Name" : "Camil Johnson",
-        "Created" : "2013/08/10",
-        "Role" : "User",
-        "Status" : "Active",
-        "Email" : "camol@gmail.com"
+        "Id": uuidv4(),
+        "Avatar": "50",
+        "Name": "Camil Jonson",
+        "Created": "2013/08/08",
+        "Role": "User",
+        "Status": "Pending",
+        "Email": "camil@gmail.com",
+        "Gender": "men"
       },
       {
-        "Avatar" : "https://www.bootdey.com/img/Content/avatar/avatar4.png",
-        "Name" : "Johny Sins",
-        "Created" : "2013/08/12",
-        "Role" : "User",
-        "Status" : "Active",
-        "Email" : "sins@gmail.com"
+        "Id": uuidv4(),
+        "Avatar": "33",
+        "Name": "Jenifer Jonson",
+        "Created": "2013/08/03",
+        "Role": "Moderator",
+        "Status": "Active",
+        "Email": "jj@gmail.com",
+        "Gender": "women"
+      },
+      {
+        "Id": uuidv4(),
+        "Avatar": "46",
+        "Name": "Mikle Jekson",
+        "Created": "2013/08/03",
+        "Role": "Moderator",
+        "Status": "Banned",
+        "Email": "mj@gmail.com",
+        "Gender": "men"
       }
     ]
   }

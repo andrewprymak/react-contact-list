@@ -1,5 +1,5 @@
 @import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-@import "../node_modules/font-awesome/css/font-awesome.min.css"
+@import "../node_modules/font-awesome/css/font-awesome.min.css";
 
 body {
   margin-top: 20px;
@@ -210,4 +210,14 @@ body {
 
 .table-stats .table-line-plus .status-social-icon {
   color: #a75d54;
+}
+
+a.btn.btn-primary {
+  background-color: red;
+  margin: 20px;
+}
+
+div.input-group.mb-3 {
+  width: 500px;
+  margin: 0 auto;
 }
