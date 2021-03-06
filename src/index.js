@@ -1,15 +1,24 @@
-import React, {Component, Fragment} from 'react';
+import React, { Fragment, Component } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+
+// Router
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 
 // Import uuid
 import { v4 as uuidv4 } from 'uuid';
 
-//Components
-import Header from './Components/Header/Header';
-import Search from './Components/Search/search';
-import ContactList from './Components/ContactList/contactlist';
-import Footer from './Components/Footer/Footer';
+
+
+// Components
+import Header from "./Components/Header/Header";
+import ContactList from "./Components/ContactList/contactlist";
+import Footer from "./Components/Footer/Footer";
+import AddNewContact from './Components/AddNewContact/addnewcontact';
 
 class App extends Component {
 
@@ -58,18 +67,49 @@ class App extends Component {
     ]
   }
 
-  render(){
-    const {List} = this.state;
-    return(
+  onDelete = (Id) => {
+    const index = this.state.List.findIndex((elem) => elem.Id === Id);
+    const partOne = this.state.List.slice(0, index);
+    const partTwo = this.state.List.slice(index + 1);
+    const newList = [...partOne, ...partTwo];
+    this.setState(() => {
+      return {
+        List: newList,
+      };
+    });
+  }
+
+  onStatusChange = (Id) => {
+    const index = this.state.List.findIndex((elem) => elem.Id === Id);
+    let newList = this.state.List.slice();
+    if (newList[index].Status === "Inactive") {
+      newList[index].Status = "Active"
+    }
+
+    this.setState(() => {
+      return {
+        List: newList
+      }
+    })
+  }
+
+  render() {
+    const { List } = this.state;
+    console.log("APP state => ", this.state)
+    return (
       <Fragment>
-      <Header />
-      <Search/>
-      <ContactList List={List} />
-      <Footer/>
+        <Router>
+        <Header />
+          <Switch>
+            <Route path="/" exact render={() => <ContactList List={List} onStatusChange={this.onStatusChange} onDelete={this.onDelete} />} />
+            <Route path="/add-contact" exact render={() => <AddNewContact  />} />
+          </Switch>
+          <Footer />
+        </Router>
+        
       </Fragment>
-      
+
     )
   }
 }
-
 ReactDOM.render(<App />, document.getElementById("root"));
