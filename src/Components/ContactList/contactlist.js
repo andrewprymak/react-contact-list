@@ -22,6 +22,7 @@ const ContactList = ({ List, onStatusChange, onDelete }) => {
                                     <thead>
                                         <tr>
                                             <th><span>User</span></th>
+                                            <th className="text-center"><span>Role</span></th>
                                             <th><span>Created</span></th>
                                             <th className="text-center"><span>Status</span></th>
                                             <th><span>Email</span></th>

@@ -37,7 +37,7 @@ class App extends Component {
       {
         "Id": uuidv4(),
         "Avatar": "50",
-        "Name": "Camil Jonson",
+        "Name": "Camil Johnson",
         "Created": "2013/08/08",
         "Role": "User",
         "Status": "Pending",
@@ -47,7 +47,7 @@ class App extends Component {
       {
         "Id": uuidv4(),
         "Avatar": "33",
-        "Name": "Jenifer Jonson",
+        "Name": "Jennifer Johnson",
         "Created": "2013/08/03",
         "Role": "Moderator",
         "Status": "Active",
@@ -57,7 +57,7 @@ class App extends Component {
       {
         "Id": uuidv4(),
         "Avatar": "46",
-        "Name": "Mikle Jekson",
+        "Name": "Michael Jackson",
         "Created": "2013/08/03",
         "Role": "Moderator",
         "Status": "Banned",

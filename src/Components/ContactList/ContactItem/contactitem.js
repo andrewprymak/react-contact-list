@@ -4,7 +4,6 @@ import "./contactitem.css";
 class ContactItem extends Component {
 
     render() {
-        // console.log("contact ITEM PROPS => ", this.props)
         const { onStatusChange, onDelete } = this.props;
         const { Avatar, Name, Created, Role, Status, Email, Gender } = this.props;
         const URL = `https://randomuser.me/api/portraits/${Gender}/${Avatar}.jpg`;
@@ -22,7 +21,9 @@ class ContactItem extends Component {
                 <td>
                     <img src={URL} alt="" />
                     <a href="#" className="user-link">{Name}</a>
-                    <span className="user-subhead">{Role}</span>
+                </td>
+                <td className="text-center">
+                    {Role}
                 </td>
                 <td>
                     {Created}
