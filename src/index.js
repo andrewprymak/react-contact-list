@@ -19,6 +19,7 @@ import Header from "./Components/Header/Header";
 import ContactList from "./Components/ContactList/contactlist";
 import Footer from "./Components/Footer/Footer";
 import AddNewContact from './Components/AddNewContact/addnewcontact';
+import NotFound from './Components/NotFound/NotFound';
 
 class App extends Component {
 
@@ -79,6 +80,15 @@ class App extends Component {
     });
   }
 
+onAddContact = (newContact) => {
+  const tmpList = this.state.List.slice();
+  const newList = [...tmpList, newContact];
+  this.setState(()=>{
+    return{List: newList}
+    
+  })
+}
+
   onStatusChange = (Id) => {
     const index = this.state.List.findIndex((elem) => elem.Id === Id);
     let newList = this.state.List.slice();
@@ -102,7 +112,8 @@ class App extends Component {
         <Header />
           <Switch>
             <Route path="/" exact render={() => <ContactList List={List} onStatusChange={this.onStatusChange} onDelete={this.onDelete} />} />
-            <Route path="/add-contact" exact render={() => <AddNewContact  />} />
+            <Route path="/add-contact" exact render={() => <AddNewContact onAddContact={this.onAddContact} />} />
+            <Route component={NotFound} />
           </Switch>
           <Footer />
         </Router>

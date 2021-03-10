@@ -2,13 +2,14 @@ import React, { Fragment } from "react";
 
 import ContactItem from "./ContactItem/contactitem";
 
-const ContactList = ({ List, onStatusChange, onDelete }) => {
+const ContactList = ({ List, onStatusChange, onDelete, onEdit }) => {
     const item = List.map(contact => {
         return (
             <ContactItem Id={contact.Id} key={contact.Id} Avatar={contact.Avatar} Gender={contact.Gender} Name={contact.Name} Created={contact.Created}
                 Role={contact.Role} Status={contact.Status} Email={contact.Email}
                 onStatusChange={() => onStatusChange(contact.Id)}
-                onDelete={() => onDelete(contact.Id)} />
+                onDelete={() => onDelete(contact.Id)}
+                onEdit={() => onEdit(contact.Id)} />
         )
     })
     return (
@@ -26,7 +27,7 @@ const ContactList = ({ List, onStatusChange, onDelete }) => {
                                             <th><span>Created</span></th>
                                             <th className="text-center"><span>Status</span></th>
                                             <th><span>Email</span></th>
-                                            <th>&nbsp;</th>
+                                            <th><span></span></th>
                                         </tr>
                                     </thead>
                                     <tbody>
