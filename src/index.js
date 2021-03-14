@@ -20,53 +20,114 @@ import ContactList from "./Components/ContactList/contactlist";
 import Footer from "./Components/Footer/Footer";
 import AddNewContact from './Components/AddNewContact/addnewcontact';
 import NotFound from './Components/NotFound/NotFound';
+import EditContact from './Components/EditContact/editContact'
 
 class App extends Component {
-
+  URL = 'https://fe01-5081b-default-rtdb.firebaseio.com/List.json'
   state = {
-    List: [
-      {
-        "Id": uuidv4(),
-        "Avatar": "20",
-        "Name": "Mila Kunis",
-        "Created": "2013/08/08",
-        "Role": "Admin",
-        "Status": "Inactive",
-        "Email": "mila@kunis.com",
-        "Gender": "women"
-      },
-      {
-        "Id": uuidv4(),
-        "Avatar": "50",
-        "Name": "Camil Johnson",
-        "Created": "2013/08/08",
-        "Role": "User",
-        "Status": "Pending",
-        "Email": "camil@gmail.com",
-        "Gender": "men"
-      },
-      {
-        "Id": uuidv4(),
-        "Avatar": "33",
-        "Name": "Jennifer Johnson",
-        "Created": "2013/08/03",
-        "Role": "Moderator",
-        "Status": "Active",
-        "Email": "jj@gmail.com",
-        "Gender": "women"
-      },
-      {
-        "Id": uuidv4(),
-        "Avatar": "46",
-        "Name": "Michael Jackson",
-        "Created": "2013/08/03",
-        "Role": "Moderator",
-        "Status": "Banned",
-        "Email": "mj@gmail.com",
-        "Gender": "men"
-      }
-    ]
+    // List: [
+    //   {
+    //     "Id": uuidv4(),
+    //     "Avatar": "20",
+    //     "Name": "Mila Kunis",
+    //     "Created": "2013/08/08",
+    //     "Role": "Admin",
+    //     "Status": "Inactive",
+    //     "Email": "mila@kunis.com",
+    //     "Gender": "women"
+    //   },
+    //   {
+    //     "Id": uuidv4(),
+    //     "Avatar": "50",
+    //     "Name": "Camil Johnson",
+    //     "Created": "2013/08/08",
+    //     "Role": "User",
+    //     "Status": "Pending",
+    //     "Email": "camil@gmail.com",
+    //     "Gender": "men"
+    //   },
+    //   {
+    //     "Id": uuidv4(),
+    //     "Avatar": "33",
+    //     "Name": "Jennifer Johnson",
+    //     "Created": "2013/08/03",
+    //     "Role": "Moderator",
+    //     "Status": "Active",
+    //     "Email": "jj@gmail.com",
+    //     "Gender": "women"
+    //   },
+    //   {
+    //     "Id": uuidv4(),
+    //     "Avatar": "46",
+    //     "Name": "Michael Jackson",
+    //     "Created": "2013/08/03",
+    //     "Role": "Moderator",
+    //     "Status": "Banned",
+    //     "Email": "mj@gmail.com",
+    //     "Gender": "men"
+    //   }
+    // ]
+
+    List: [],
+    currentContact: ""
   }
+
+  componentDidMount(){
+    this.updateDatabase();
+  }
+
+  updateDatabase = () => {
+    fetch(this.URL)
+      .then(responce => {
+        return responce.json();
+      }).then(data => {
+        if (data !== null) {
+          this.setState(() => {
+            return {
+              List: data
+            }
+          })
+        }
+
+      })
+      .catch(err => console.log(err))
+
+  }
+
+  saveData = (contactList) => {
+    fetch(this.URL, {
+      method: "PUT",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(contactList),
+    }).then(response => {
+      console.log("saveData response")
+    }).catch(err => console.log())
+  }
+
+
+  // componentDidMount(){
+  //   this.updateDatabase();
+  // }
+
+  // async updateDatabase  ()  {
+  //   const List = await fetch(this.URL)
+  //   .then(response => {
+  //     return response.json();
+  //   }).then(data => {
+  //     console.log ("update", data);
+  //     this.setState(()=>{
+  //       return{
+  //         List: data
+  //       }
+  //     })
+  //   })
+  //   .catch(err => console.log(err))
+
+  // }
+
+  
 
   onDelete = (Id) => {
     const index = this.state.List.findIndex((elem) => elem.Id === Id);
@@ -84,8 +145,33 @@ onAddContact = (newContact) => {
   const tmpList = this.state.List.slice();
   const newList = [...tmpList, newContact];
   this.setState(()=>{
-    return{List: newList}
+    return{
+      List: newList
+    }
     
+  })
+  this.saveData(newList)
+}
+
+onEdit = (Id) => {
+  const index = this.state.List.findIndex((elem) => elem.Id === Id);
+  const selectedContact = this.state.List[index];
+  this.setState({
+    currentContact: selectedContact
+  })
+}
+
+onEditCurrentContact = (newContact) => {
+  const { Id } = newContact;
+  const index = this.state.List.findIndex((elem) => elem.Id === Id);
+  const partOne = this.state.List.slice(0, index);
+  const partTwo = this.state.List.slice(index + 1);
+  const newList = [...partOne, newContact, ...partTwo];
+
+  this.setState(() => {
+    return {
+      List: newList,
+    };
   })
 }
 
@@ -104,15 +190,16 @@ onAddContact = (newContact) => {
   }
 
   render() {
-    const { List } = this.state;
+    const { List, currentContact } = this.state;
     console.log("APP state => ", this.state)
     return (
       <Fragment>
         <Router>
         <Header />
           <Switch>
-            <Route path="/" exact render={() => <ContactList List={List} onStatusChange={this.onStatusChange} onDelete={this.onDelete} />} />
+            <Route path="/" exact render={() => <ContactList onEdit={this.onEdit} List={List} onStatusChange={this.onStatusChange} onDelete={this.onDelete} />} />
             <Route path="/add-contact" exact render={() => <AddNewContact onAddContact={this.onAddContact} />} />
+            <Route path="/editContact" exact render={() => <EditContact currentContact={currentContact} onEditCurrentContact={this.onEditCurrentContact} />} />
             <Route component={NotFound} />
           </Switch>
           <Footer />
