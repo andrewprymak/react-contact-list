@@ -139,6 +139,7 @@ class App extends Component {
         List: newList,
       };
     });
+    this.saveData(newList);
   }
 
 onAddContact = (newContact) => {
