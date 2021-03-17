@@ -2,8 +2,8 @@ import React, { Fragment } from "react";
 
 import ContactItem from "./ContactItem/contactitem";
 
-const ContactList = ({ List, onStatusChange, onDelete, onEdit }) => {
-    const item = List.map(contact => {
+const ContactList = ({ List, onStatusChange, onDelete, onEdit, searchContact }) => {
+    const item = searchContact.map(contact => {
         return (
             <ContactItem Id={contact.Id} key={contact.Id} Avatar={contact.Avatar} Gender={contact.Gender} Name={contact.Name} Created={contact.Created}
                 Role={contact.Role} Status={contact.Status} Email={contact.Email}

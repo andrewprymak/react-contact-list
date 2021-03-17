@@ -25,51 +25,9 @@ import EditContact from './Components/EditContact/editContact'
 class App extends Component {
   URL = 'https://fe01-5081b-default-rtdb.firebaseio.com/List.json'
   state = {
-    // List: [
-    //   {
-    //     "Id": uuidv4(),
-    //     "Avatar": "20",
-    //     "Name": "Mila Kunis",
-    //     "Created": "2013/08/08",
-    //     "Role": "Admin",
-    //     "Status": "Inactive",
-    //     "Email": "mila@kunis.com",
-    //     "Gender": "women"
-    //   },
-    //   {
-    //     "Id": uuidv4(),
-    //     "Avatar": "50",
-    //     "Name": "Camil Johnson",
-    //     "Created": "2013/08/08",
-    //     "Role": "User",
-    //     "Status": "Pending",
-    //     "Email": "camil@gmail.com",
-    //     "Gender": "men"
-    //   },
-    //   {
-    //     "Id": uuidv4(),
-    //     "Avatar": "33",
-    //     "Name": "Jennifer Johnson",
-    //     "Created": "2013/08/03",
-    //     "Role": "Moderator",
-    //     "Status": "Active",
-    //     "Email": "jj@gmail.com",
-    //     "Gender": "women"
-    //   },
-    //   {
-    //     "Id": uuidv4(),
-    //     "Avatar": "46",
-    //     "Name": "Michael Jackson",
-    //     "Created": "2013/08/03",
-    //     "Role": "Moderator",
-    //     "Status": "Banned",
-    //     "Email": "mj@gmail.com",
-    //     "Gender": "men"
-    //   }
-    // ]
-
     List: [],
-    currentContact: ""
+    currentContact: "",
+    searchContact: []
   }
 
   componentDidMount(){
@@ -84,14 +42,21 @@ class App extends Component {
         if (data !== null) {
           this.setState(() => {
             return {
-              List: data
+              List: data,
+              searchContact: data
             }
           })
-        }
-
+        } else {
+          this.setState(() => {
+            return {
+              List: [],
+              searchContact: []
+            }
+          })
+        } 
+        
       })
       .catch(err => console.log(err))
-
   }
 
   saveData = (contactList) => {
@@ -106,28 +71,17 @@ class App extends Component {
     }).catch(err => console.log())
   }
 
-
-  // componentDidMount(){
-  //   this.updateDatabase();
-  // }
-
-  // async updateDatabase  ()  {
-  //   const List = await fetch(this.URL)
-  //   .then(response => {
-  //     return response.json();
-  //   }).then(data => {
-  //     console.log ("update", data);
-  //     this.setState(()=>{
-  //       return{
-  //         List: data
-  //       }
-  //     })
-  //   })
-  //   .catch(err => console.log(err))
-
-  // }
-
-  
+  onInputChange = (event) => {    
+    let inputValue = event.target.value;    
+    const filterNames = this.state.List.filter(names => {
+      return names.Name.toLowerCase().includes(inputValue.toLowerCase());
+    })
+    this.setState(() => {
+      return {
+        searchContact: filterNames,
+      };
+    });  
+  }
 
   onDelete = (Id) => {
     const index = this.state.List.findIndex((elem) => elem.Id === Id);
@@ -137,6 +91,7 @@ class App extends Component {
     this.setState(() => {
       return {
         List: newList,
+        searchContact: newList
       };
     });
     this.saveData(newList);
@@ -155,10 +110,10 @@ onAddContact = (newContact) => {
 }
 
 onEdit = (Id) => {
-  const index = this.state.List.findIndex((elem) => elem.Id === Id);
-  const selectedContact = this.state.List[index];
+  const index = this.state.searchContact.findIndex((elem) => elem.Id === Id);
+  let newList = this.state.List[index];
   this.setState({
-    currentContact: selectedContact
+    currentContact: newList[index]
   })
 }
 
@@ -174,31 +129,42 @@ onEditCurrentContact = (newContact) => {
       List: newList,
     };
   })
+this.setState(() => {
+  return {
+    searchContact: newList,
+  };
+})
 }
 
   onStatusChange = (Id) => {
-    const index = this.state.List.findIndex((elem) => elem.Id === Id);
+    const index = this.state.searchContact.findIndex((elem) => elem.Id === Id);
     let newList = this.state.List.slice();
     if (newList[index].Status === "Inactive") {
       newList[index].Status = "Active"
+    } else if (newList[index].Status === "Active") {
+      newList[index].Status = "Pending";
+    } else if (newList[index].Status === "Pending") {
+      newList[index].Status = "Banned";
+    } else {
+      newList[index].Status = "Inactive";
     }
 
     this.setState(() => {
       return {
-        List: newList
+        searchContact: newList
       }
     })
   }
 
   render() {
-    const { List, currentContact } = this.state;
+    const { List, currentContact, searchContact } = this.state;
     console.log("APP state => ", this.state)
     return (
       <Fragment>
         <Router>
-        <Header />
+        <Header onInputChange={this.onInputChange} />
           <Switch>
-            <Route path="/" exact render={() => <ContactList onEdit={this.onEdit} List={List} onStatusChange={this.onStatusChange} onDelete={this.onDelete} />} />
+            <Route path="/" exact render={() => <ContactList searchContact={searchContact} onEdit={this.onEdit} List={List} onStatusChange={this.onStatusChange} onDelete={this.onDelete} onInputChange={this.onInputChange} />} />
             <Route path="/add-contact" exact render={() => <AddNewContact onAddContact={this.onAddContact} />} />
             <Route path="/editContact" exact render={() => <EditContact currentContact={currentContact} onEditCurrentContact={this.onEditCurrentContact} />} />
             <Route component={NotFound} />

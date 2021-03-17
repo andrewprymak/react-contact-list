@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 // Search component
 import Search from "../Search/search";
 
-const Header = () => {
+const Header = ({onInputChange}) => {
     return (
         <Fragment>
             <div className="container">
