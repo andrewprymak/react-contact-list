@@ -48,7 +48,6 @@ class EditContact extends React.Component {
     editContact = (event) => {
         event.preventDefault();
         const { Id, Avatar, Name, Email, Role, Status, Created, Gender } = this.state;
-
         const newContact = { Id, Avatar, Name, Created, Role, Status, Gender, Email };
         const { onEditCurrentContact } = this.props;
         onEditCurrentContact(newContact);
@@ -70,12 +69,14 @@ class EditContact extends React.Component {
             <div className="container">
                 <div className="row">
                     <h2>Edit contact</h2>
+                    <form action="#" onSubmit={this.EditContact} className="main-add-form"></form>
                     <div className="container bootstrap snippets bootdey">
                         <div className="row ng-scope">
                             <div className="col-md-4">
                                 <div className="panel panel-default">
                                     <div className="panel-body text-center">
-                                        <div className="pv-lg"><img
+                                        <div className="pv-lg">
+                                            <img
                                             className="center-block img-responsive img-circle img-thumbnail thumb96"
                                             src={URL} alt="Contact" />
                                         </div>
