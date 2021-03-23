@@ -13,3 +13,9 @@ export const addNewContact = (contactList) => {
         payload: contactList
     }
 }
+export const deleteContact = (contactList) => {
+    return {
+        type: "DELETE_CONTACT",
+        payload: contactList
+    }
+}

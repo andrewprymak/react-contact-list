@@ -1,11 +1,22 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import {connect} from "react-redux";
 import "./contactitem.css";
+import {deleteContact} from "../../../Actions/ContactListActions"
+import {saveData} from "../../../Services/api-service"
 
 class ContactItem extends Component {
+    onDelete = () => {
+		const { List } = this.props;		
+		const index = List.findIndex((elem) => elem.Id === this.props.Id);
+		const { deleteContact } = this.props;				
+		List.splice(index, 1);		
+		deleteContact(List);
+		saveData(List);
+	}
 
     render() {
-        const { onStatusChange, onDelete, onEdit } = this.props;
+        const { onStatusChange, deleteContact, onEdit } = this.props;
         const { Avatar, Name, Created, Role, Status, Email, Gender } = this.props;
         const URL = `https://randomuser.me/api/portraits/${Gender}/${Avatar}.jpg`;
 
@@ -53,7 +64,7 @@ class ContactItem extends Component {
                     <a href="#" className="table-link danger">
                         <span className="fa-stack">
                             <i className="fa fa-square fa-stack-2x"></i>
-                            <i className="fa fa-trash-o fa-stack-1x fa-inverse" onClick={onDelete}></i>
+                            <i className="fa fa-trash-o fa-stack-1x fa-inverse" onClick={this.onDelete}></i>
                         </span>
                     </a>
                 </td>
@@ -62,4 +73,13 @@ class ContactItem extends Component {
     }
 
 }
-export default ContactItem;
+const mapStateToProps = ({ ContactListReducer }) => {
+	const { List } = ContactListReducer;
+	return { List }
+}
+
+const mapDispatchToProps = {
+	deleteContact
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactItem); 

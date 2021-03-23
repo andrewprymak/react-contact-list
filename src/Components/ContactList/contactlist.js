@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import { updateDatabase } from "../../Services/api-service";
 import { getAllContacts } from "../../Actions/ContactListActions"
 
+
 import ContactItem from "./ContactItem/contactitem";
 
 const ContactList = ({ List, getAllContacts }) => {
